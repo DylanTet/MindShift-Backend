@@ -1,0 +1,17 @@
+{
+  "name": "MindShift",
+  "version": "1.0.0",
+  "description": "Backend for MindShift",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^5.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.11",
+    "typescript": "^5.8.2"
+  }
+}
