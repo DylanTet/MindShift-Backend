@@ -1,9 +1,10 @@
 interface User {
   name: string,
   email: string,
-  journalEntries: Array<JournalEntry>,
-  moodEntries: Array<MoodEntry>,
-  energyEntries: Array<EnergyEntry>
+  id: number,
+  journalEntries?: Array<JournalEntry>,
+  moodEntries?: Array<MoodEntry>,
+  energyEntries?: Array<EnergyEntry>
 }
 
 interface JournalEntry {
