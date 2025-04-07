@@ -1,4 +1,4 @@
-import pkg from 'pg'
+import pkg, { Client, QueryResult } from 'pg'
 const { Pool } = pkg;
 import dotenv from 'dotenv'
 
@@ -12,16 +12,20 @@ const pool = new Pool({
     port: 3000
 });
 
-function createNewUserInDB(userName: string, userEmail: string) {
-  try {
-    const queryText = 'INSERT INTO users(name, email) VALUES($1, $2) RETURNING *';
-    const res = pool.query(queryText, [userName, userEmail]);
-  } catch {
-    console.log("There was an error trying to create user")
-  }
-  
+export async function createNewUserInDB(userData: User, client: Client): Promise<void> {
+  const queryText = 'INSERT INTO users(id, name, email) VALUES($1, $2, $3) RETURNING *';
+  await client.query(queryText, [userData.id, userData.name, userData.email]);
 }
 
-function addToDatabase() {}
+export async function createCustomerTable(client: Client): Promise<void> {
+  const sql = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL, name VARCHAR NOT NULL, email VARCHAR NOT NULL, PRIMARY KEY (id))";
+  await client.query(sql);
+}
 
-function removeDataFromDB() {}
+export async function getCustomerFromDB(id: number, client: Client): Promise<User> {
+  const sql = "SELECT * FROM users WHERE id = $1";
+  const data = await client.query(sql, [id]);
+  return data.rows[0];
+}
+
+export function removeDataFromDB() {}
