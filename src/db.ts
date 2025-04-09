@@ -1,4 +1,4 @@
-import pkg, { Client, QueryResult } from 'pg'
+import pkg, { Client } from 'pg'
 const { Pool } = pkg;
 import dotenv from 'dotenv'
 
@@ -11,6 +11,21 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     port: 3000
 });
+
+export async function addDataToUser(id: number, journalData: JournalEntry,
+                                    moodData: MoodEntry, energyData: EnergyEntry,
+                                    client: Client): Promise<void> {
+  const queryText = `
+    UPDATE users
+    SET
+      journal_entries = COALESCE(journal_entries, '{}') || ARRAY[$2::jsonb],
+      mood_entries = COALESCE(mood_entries, '{}') || ARRAY[$3::jsonb],
+      energy_entries = COALESCE(energy_entries, '{}') || ARRAY[$4::jsonb]
+    WHERE id = $1
+  `;
+
+  await client.query(queryText, [id, journalData, moodData, energyData]);
+} 
 
 export async function createNewUserInDB(userData: User, client: Client): Promise<void> {
   const queryText = 'INSERT INTO users(id, name, email) VALUES($1, $2, $3) RETURNING *';
