@@ -26,4 +26,13 @@ describe("Customer Database", () => {
     const customers = await getCustomerFromDB(1, postgresClient);
     expect(customers).toEqual(customerData)
   });
+
+  it("should append to an existing user", async () => {
+    const customerData = { name: "Dylan", email: "abs@gmail.com", id: 1 };
+    const journalData = {};
+    const moodData = {};
+    const energyData = {};
+    await createNewUserInDB(customerData, postgresClient);
+    expect(customers).toEqual(customerData)
+  });
 });
